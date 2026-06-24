@@ -1,0 +1,6 @@
+@Skybank.Api_HostAddress = http://localhost:5245
+
+GET {{Skybank.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
