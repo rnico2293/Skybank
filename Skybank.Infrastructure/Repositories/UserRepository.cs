@@ -14,6 +14,17 @@ namespace Skybank.Infrastructure.Repositories
              _context = context; 
         }
 
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(x => x.Email == email);
+        }
+        public async Task DeleteAsync(User user)
+        {
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+        }   
+
         public async Task<bool> EmailExistsAsync(string email)
         {
             return await _context.Users

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Skybank.Application.DTOs;
+using Skybank.Application.DTOs.User;
 using Skybank.Application.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -29,15 +29,16 @@ namespace Skybank.Api.Controllers
             });
         }
 
+        [HttpDelete("{email}")]
+        public async Task<IActionResult> Delete(string email)
+        {
+            var userId = await _userService.DeleteAsync(email);
 
-
-
-        // GET: api/<UsersController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
+            return Ok(new
+            {
+                Message = "Usuario borrado correctamente"
+            });
+        }
+        
     }
 }

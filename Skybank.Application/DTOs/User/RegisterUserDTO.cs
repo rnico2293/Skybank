@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Skybank.Application.DTOs
+namespace Skybank.Application.DTOs.User
 {
     public class RegisterUserDTO
     {
