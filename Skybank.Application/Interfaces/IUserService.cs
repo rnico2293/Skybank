@@ -7,5 +7,8 @@ namespace Skybank.Application.Interfaces
     {
         Task<Guid> RegisterAsync(RegisterUserDTO userDTO);
         Task<Guid> DeleteAsync (string email);
+        Task<List<GetUserDTO>> GetAllAsync();   
+
+        Task<GetUserDTO> GetByEmailAsync(string email); 
     }
 }

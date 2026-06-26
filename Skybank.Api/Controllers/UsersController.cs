@@ -39,6 +39,29 @@ namespace Skybank.Api.Controllers
                 Message = "Usuario borrado correctamente"
             });
         }
-        
-    }
+
+
+        [HttpGet("get-all")]
+        public async Task<IActionResult> GetAll()
+        {
+            // This method is not implemented in the IUserService interface.
+            // You would need to implement a method in the service and repository to retrieve all users.
+            //return Ok(new
+            //{
+            //    Message = "GetAll method is not implemented yet."
+            //});
+            var users = await _userService.GetAllAsync();
+            return Ok(users);
+        }
+
+
+        [HttpGet("by-email")]
+        public async Task<IActionResult> GetByEmail (string email)
+        {
+            
+            var user = await _userService.GetByEmailAsync(email);
+            return Ok(user);
+        }
+
+    } 
 }
