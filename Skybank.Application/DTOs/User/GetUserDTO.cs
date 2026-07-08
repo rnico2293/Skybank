@@ -22,7 +22,5 @@ namespace Skybank.Application.DTOs.User
             Email = email;
             CreatedAt = createdAt;
         }
-
-
     }
 }
