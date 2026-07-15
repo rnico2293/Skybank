@@ -1,12 +1,19 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Skybank.Application.Interfaces;
 using Skybank.Application.Services;
 using Skybank.Domain.Interfaces;
+using Skybank.Infrastructure.Configurations;
 using Skybank.Infrastructure.Persistence;
 using Skybank.Infrastructure.Repositories;
 using Skybank.Infrastructure.Security;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+var jwtOptions = builder.Configuration
+    .GetSection("Jwt")
+    .Get<JwtOptions>();
 
 // Add services to the container.
 
@@ -17,11 +24,38 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHasherService, PasswordHasherService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddDbContext<SkyBankDbContext>(options =>
 {
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = true,
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidIssuer = jwtOptions!.Issuer,
+            ValidAudience = jwtOptions!.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                 Encoding.UTF8.GetBytes(jwtOptions.Key)),
+            ClockSkew = TimeSpan.Zero
+
+
+
+        };
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,7 +66,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

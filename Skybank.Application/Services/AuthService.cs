@@ -22,16 +22,22 @@ namespace Skybank.Application.Services
               
             var user = await _userRepository.GetByEmailAsync(loginUserDTO.Email);
 
-            var isValidPassword = _passwordHasherService.VerifyPassword(loginUserDTO.Password,user.PasswordHash); 
+            if (user == null)
+                throw new Exception("Incorrect credentials");
+
+            bool isValidPassword = _passwordHasherService.VerifyPassword(loginUserDTO.Password,user.PasswordHash); 
 
             if (!isValidPassword)
-                throw new Exception("Incorrect credentials");
+                throw new Exception("Invalid credentials");
 
             var token = _jwtTokenService.GenerateToken(user);
 
             return new LoginResponseDTO
             {
-                Token = token
+                Token = token,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName
             };
         }
    
