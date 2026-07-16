@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Skybank.Application.DTOs.User;
 using Skybank.Application.Interfaces;
 
@@ -40,7 +41,7 @@ namespace Skybank.Api.Controllers
             });
         }
 
-
+        [Authorize]
         [HttpGet("get-all")]
         public async Task<IActionResult> GetAll()
         {
