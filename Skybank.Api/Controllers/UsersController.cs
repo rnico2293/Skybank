@@ -30,6 +30,7 @@ namespace Skybank.Api.Controllers
             });
         }
 
+        [Authorize]
         [HttpDelete("{email}")]
         public async Task<IActionResult> Delete(string email)
         {
@@ -55,7 +56,7 @@ namespace Skybank.Api.Controllers
             return Ok(users);
         }
 
-
+        [Authorize]
         [HttpGet("by-email")]
         public async Task<IActionResult> GetByEmail (string email)
         {
