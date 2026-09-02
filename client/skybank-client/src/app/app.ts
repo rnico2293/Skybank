@@ -8,5 +8,6 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('skybank-client');
+  protected readonly title = signal('skybank-v01');
+  
 }
