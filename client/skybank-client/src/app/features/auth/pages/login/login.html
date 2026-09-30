@@ -3,49 +3,71 @@
   <div class="w-full max-w-md flex flex-col gap-6 text-center">
 
     <h1 class="text-4xl font-bold text-blue-500"  >
-      SKY BANK 
+      SKY BANK
     </h1>
-
-
 
     <form
       [formGroup]="loginForm"
       (ngSubmit)="onSubmit()"
       class="flex flex-col gap-4"
     >
-    
-      <div class="flex flex-col gap-1">
-          <label for="username">Email</label>
+
+      @if (errorMessage()) {
+        <div class="py-2 px-3 rounded bg-red-100 text-red-700 text-sm text-left">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <div class="flex flex-col gap-1 text-left">
+          <label for="email">Email</label>
 
           <input
           id="email"
           type="email"
           formControlName="email"
-          class = "py-1 mt-1 border-2 rounded 
-          border-grey-200 focus:outline-none 
-          focus:ring-2 focus:ring-blue-500 
+          class = "py-1 mt-1 border-2 rounded
+          border-grey-200 focus:outline-none
+          focus:ring-2 focus:ring-blue-500
           hover:ring-2 hover:ring-yellow-500">
+
+          @if (loginForm.controls.email.invalid && loginForm.controls.email.touched) {
+            <span class="text-red-600 text-sm">
+              @if (loginForm.controls.email.hasError('required')) {
+                El email es obligatorio.
+              } @else if (loginForm.controls.email.hasError('email')) {
+                Ingresa un email válido.
+              }
+            </span>
+          }
       </div>
-        
-      <div class="flex flex-col gap-1">
+
+      <div class="flex flex-col gap-1 text-left">
           <label for="password">Password</label>
-          
+
           <input
           id="password"
           type="password"
           formControlName="password"
-          class = "py-1 mt-1 border-2 rounded 
-          border-grey-200 focus:outline-none 
-          focus:ring-2 focus:ring-blue-500 
+          class = "py-1 mt-1 border-2 rounded
+          border-grey-200 focus:outline-none
+          focus:ring-2 focus:ring-blue-500
           hover:ring-2 hover:ring-yellow-500">
+
+          @if (loginForm.controls.password.invalid && loginForm.controls.password.touched) {
+            <span class="text-red-600 text-sm">
+              La contraseña es obligatoria.
+            </span>
+          }
       </div>
-        
+
       <button type="submit"
-        class = "py-1 mt-4 border-2 rounded border-black-200 
+        [disabled]="loading()"
+        class = "py-1 mt-4 border-2 rounded border-black-200
         focus:outline-none
-        focus:ring-2 focus:ring-blue-500 
-        hover:ring-2 hover:ring-yellow-500">
-        Login
+        focus:ring-2 focus:ring-blue-500
+        hover:ring-2 hover:ring-yellow-500
+        disabled:opacity-50 disabled:cursor-not-allowed">
+        {{ loading() ? 'Ingresando...' : 'Login' }}
       </button>
 
     </form>
